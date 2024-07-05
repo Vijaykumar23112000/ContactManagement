@@ -6,8 +6,6 @@ import com.magret.service.ContactService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,14 +35,12 @@ public class ContactController {
     }
 
     @GetMapping
-    public ResponseEntity<PagedModel<EntityModel<Contact>>> getContacts(
+    public ResponseEntity<Page<Contact>> getContacts(
             @RequestParam(value = "page" , defaultValue = "0") int page ,
             @RequestParam(value = "size" , defaultValue = "10") int size
     )
     {
-        Page<Contact> contactsPages = contactService.getAllContact(page , size);
-        PagedModel<EntityModel<Contact>> pageModel = pagedResourcesAssembler.toModel(contactsPages);
-        return ResponseEntity.ok().body(pageModel);
+        return ResponseEntity.ok().body(contactService.getAllContact(page , size));
     }
 
     @GetMapping("/{id}")
@@ -72,9 +68,9 @@ public class ContactController {
         return Files.readAllBytes(Paths.get(Directory.PHOTO_DIRECTORY+filename));
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteContact(
-            @RequestParam(value = "id") String id
+            @PathVariable(value = "id") String id
     )
     {
         contactService.deleteContact(id);
