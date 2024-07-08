@@ -1,4 +1,3 @@
-import HomeClient from "@/components/home/HomeClient";
 import Link from "next/link";
 
 export default function Home() {

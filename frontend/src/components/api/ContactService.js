@@ -4,16 +4,24 @@ import { api } from "./ApiConfig";
 
 const API_URL = "http://localhost:8000/contacts"
 
-export const saveContact = async (contact) => {
-    return await axios.post(API_URL, contact)
-}
+// export const saveContact = async (contact) => {
+//     return await axios.post(API_URL, contact)
+// }
 
-export const getContacts = async (page = 0, size = 10) => {
-    return await axios.get(`${API_URL}?page=${page}&size=${size}`)
+export const saveContact = async (requestData) => {
+    try {
+        const response = await api.post("/contacts", requestData )
+        return response
+    } catch (error) {
+        console.log(error);
+    }
 }
+// export const getContacts = async (page = 0, size = 10) => {
+//     return await axios.get(`${API_URL}?page=${page}&size=${size}`)
+// }
 
 export const getAllContacts = createAsyncThunk("contacts/fetchAllContacts",
-    async ({page = 0, size = 10}) => {
+    async ({ page = 0, size = 10 }) => {
         try {
             const queryParams = new URLSearchParams({ page, size })
             const response = await api.get(`/contacts`);

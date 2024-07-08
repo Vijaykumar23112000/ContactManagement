@@ -32,7 +32,7 @@ const ContactList = ({ data, currentPage, getAllContacts }) => {
                             </a>
                         )
                     }
-                    <a className={data.totalPages === currentPage + 1 ? "disabled" : ""} onClick={() => getAllContacts(currentPage + 1)}>
+                    <a className={data.page.totalPages === currentPage + 1 ? "disabled" : ""} onClick={() => getAllContacts(currentPage + 1)}>
                         <FaGreaterThan />
                     </a>
                 </div>
