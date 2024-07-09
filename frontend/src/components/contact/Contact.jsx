@@ -10,14 +10,12 @@ import { ImCross } from "react-icons/im";
 
 const Contact = ({ contact }) => {
 
-    const defaultImageUrl = "https://media.istockphoto.com/id/1281863632/photo/close-up-portrait-of-smiling-happy-businessman-in-suit-with-suitcase-3d-illustration-of.webp?b=1&s=170667a&w=0&k=20&c=cCXtzt76YX9rZi4bgpqkHtetiS-EJ_NQqhU-anozwag="
-
     return (
         <Link href={`/contacts/${contact.id}`}
             className='contact__item'>
             <div className="">
                 <div className="contact__image">
-                    <img src={contact.photoUrl ? `${contact.photoUrl}` : defaultImageUrl} alt={contact.name} />
+                    <img src={contact.photoUrl} alt={contact.name} />
                 </div>
                 <div className="contact__details">
                     <p className='contact_name'>{contact.name.substring(0, 15)}</p>

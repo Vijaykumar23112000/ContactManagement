@@ -1,9 +1,10 @@
-"use client"
+"use client";
 
 import Link from 'next/link';
 import React, { useRef, useState } from 'react'
 import { FaWindowClose } from "react-icons/fa";
-import { saveContact } from '../api/ContactService';
+import { saveContact, updatePhoto } from '../api/ContactService';
+import LoadingPage from '../home/LoadingPage';
 
 const ModalFormData = [
     { htmlFor: "name", name: "name", id: "name", label: "Name", type: "text", },
@@ -15,64 +16,73 @@ const ModalFormData = [
 
 const formInitialValues = { name: "", email: "", phone: "", address: "", title: "", status: "Active" }
 
-const Modal = () => {
+const Modal = ({ router }) => {
+
+    const [formValues, setFormValues] = useState(formInitialValues)
+    const [file, setFile] = useState(undefined)
+    const fileRef = useRef()
+    const [loading, setLoading] = useState(false)
 
     const handleSubmit = async (e) => {
+        setLoading(true)
         e.preventDefault()
+        const { data } = await saveContact(formValues)
+        const formData = new FormData()
+        formData.append("file", file, file.name)
+        formData.append("id", data.id)
+        await updatePhoto(formData)
 
-        const response = await saveContact(formValues)
-        console.log(response);
-        // console.log(formValues);
-
+        setFile(null)
         setFormValues(formInitialValues)
         fileRef.current.value = ""
+        setLoading(false)
+        router.push('/contacts')
     }
 
     const handleChange = (e) => {
         setFormValues({ ...formValues, [e.target.name]: e.target.value });
     };
 
-    const [formValues, setFormValues] = useState(formInitialValues)
-    const [file, setFile] = useState(undefined)
-    const fileRef = useRef()
-
     return (
-        <div className='modal' id="modal">
-            <div className="modal__header">
-                <h3>New Contact</h3>
-                <FaWindowClose />
+        <>
+            {loading && <LoadingPage text="Saving Contact ... " />}
+            <div className='modal' id="modal">
+                <div className="modal__header">
+                    <h3>New Contact</h3>
+                    <FaWindowClose />
+                </div>
+                <div className="divider"></div>
+                <div className="modal__body">
+                    <form onSubmit={handleSubmit}>
+                        <div className="user-details">
+                            {
+                                ModalFormData.map((item, i) =>
+                                    <div className="input-box" key={i}>
+                                        <label htmlFor={item.htmlFor} className='details'>{item.label}</label>
+                                        <input type={item.type} id={item.id} name={item.name} value={formValues[item.name]} onChange={handleChange} required />
+                                    </div>
+                                )
+                            }
+                            <div className="input-box">
+                                <label htmlFor="status" className="details">Account Status</label>
+                                <select id="status" name="status" value={formValues.status} onChange={handleChange} required>
+                                    <option value="Active">Active</option>
+                                    <option value="Inactive">Inactive</option>
+                                </select>
+                            </div>
+                            <div className="file-input">
+                                <label htmlFor="photo" className='details'>Profile Photo</label>
+                                <input type="file" onChange={e => setFile(e.target.files[0])} ref={fileRef} id='photo' name='photo' required />
+                            </div>
+                            <div className="form_footer">
+                                <Link href={"/contacts"} className='btn btn-danger'>Cancel</Link>
+                                <button type='submit' className='btn'>Save</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div className="divider"></div>
-            <div className="modal__body">
-                <form onSubmit={handleSubmit}>
-                    <div className="user-details">
-                        {
-                            ModalFormData.map((item, i) =>
-                                <div className="input-box" key={i}>
-                                    <label htmlFor={item.htmlFor} className='details'>{item.label}</label>
-                                    <input type={item.type} id={item.id} name={item.name} value={formValues[item.name]} onChange={handleChange} required />
-                                </div>
-                            )
-                        }
-                        <div className="input-box">
-                            <label htmlFor="status" className="details">Account Status</label>
-                            <select id="status" name="status" value={formValues.status} onChange={handleChange} required>
-                                <option value="Active">Active</option>
-                                <option value="Inactive">Inactive</option>
-                            </select>
-                        </div>
-                        <div className="file-input">
-                            <label htmlFor="photo" className='details'>Profile Photo</label>
-                            <input type="file" onChange={e => setFile(e.target.files[0])} ref={fileRef} id='photo' name='photo' />
-                        </div>
-                        <div className="form_footer">
-                            <Link href={"/contacts"} className='btn btn-danger'>Cancel</Link>
-                            <button type='submit' className='btn'>Save</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
+        </>
     )
 }
 

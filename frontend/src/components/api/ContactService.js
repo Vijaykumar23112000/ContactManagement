@@ -4,21 +4,13 @@ import { api } from "./ApiConfig";
 
 const API_URL = "http://localhost:8000/contacts"
 
-// export const saveContact = async (contact) => {
-//     return await axios.post(API_URL, contact)
-// }
-
 export const saveContact = async (requestData) => {
     try {
-        const response = await api.post("/contacts", requestData )
-        return response
+        return await api.post("/contacts", requestData)
     } catch (error) {
         console.log(error);
     }
 }
-// export const getContacts = async (page = 0, size = 10) => {
-//     return await axios.get(`${API_URL}?page=${page}&size=${size}`)
-// }
 
 export const getAllContacts = createAsyncThunk("contacts/fetchAllContacts",
     async ({ page = 0, size = 10 }) => {
@@ -41,7 +33,11 @@ export const updateContact = async (contact) => {
 }
 
 export const updatePhoto = async (formData) => {
-    return await axios.put(`${API_URL}/photo`, formData)
+    try {
+        return await api.put("/contacts/photo", formData)
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 export const deleteContact = async (id) => {

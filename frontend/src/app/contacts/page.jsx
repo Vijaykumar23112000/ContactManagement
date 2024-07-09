@@ -22,7 +22,7 @@ const Contacts = () => {
         <>
             <HomeClient data={contactData.data} />
             {
-                contactData.loading && <LoadingPage />
+                contactData.loading && <LoadingPage text = "Loading ... " />
             }
             <ContactList data={contactData.data} currentPage={currentPage} getAllContacts={getAllContacts} />
         </>
