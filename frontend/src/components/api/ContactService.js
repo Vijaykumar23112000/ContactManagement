@@ -24,15 +24,6 @@ export const getAllContacts = createAsyncThunk("contacts/fetchAllContacts",
     }
 )
 
-// export const getContact = async (contactId) => {
-//     try {
-//         const response = await api.get(`/contacts/${contactId}`)
-//         return response.data
-//     } catch (error) {
-//         throw new Error(error.message);
-//     }
-// }
-
 export const getContact = createAsyncThunk("contact/fetchContact",
     async (contactId) => {
         try {
@@ -48,7 +39,7 @@ export const updateContact = async (contact) => {
     return await axios.get(API_URL, contact)
 }
 
-export const updatePhoto = async (formData) => {
+export const updateImage = async (formData) => {
     try {
         return await api.put("/contacts/photo", formData)
     } catch (error) {
