@@ -8,7 +8,7 @@ export const saveContact = async (requestData) => {
     try {
         return await api.post("/contacts", requestData)
     } catch (error) {
-        console.log(error);
+        throw new Error(error.message);
     }
 }
 
@@ -24,8 +24,13 @@ export const getAllContacts = createAsyncThunk("contacts/fetchAllContacts",
     }
 )
 
-export const getContact = async (id) => {
-    return await axios.get(`${API_URL}/${id}`)
+export const getContact = async (contactId) => {
+    try {
+        const response = await api.get(`/contacts/${contactId}`)
+        return response.data
+    } catch (error) {
+        throw new Error(error.message);
+    }
 }
 
 export const updateContact = async (contact) => {
