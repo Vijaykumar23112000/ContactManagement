@@ -39,13 +39,10 @@ const Modal = ({ router }) => {
         router.push('/contacts')
     }
 
-    const handleChange = (e) => {
-        setFormValues({ ...formValues, [e.target.name]: e.target.value });
-    };
+    const handleChange = (e) => setFormValues({ ...formValues, [e.target.name]: e.target.value });
 
     return (
         <>
-            {loading && <LoadingPage text="Saving Contact ... " />}
             <div className='modal' id="modal">
                 <div className="modal__header">
                     <h3>New Contact</h3>
@@ -81,6 +78,9 @@ const Modal = ({ router }) => {
                         </div>
                     </form>
                 </div>
+                {
+                    loading && <LoadingPage text="Saving Contact ... " />
+                }
             </div>
         </>
     )

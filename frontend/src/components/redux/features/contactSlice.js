@@ -1,9 +1,9 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { getAllContacts } from "@/components/api/ContactService";
+import { getContact } from "@/components/api/ContactService"
+import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
     loading: false,
-    data: {},
+    contactData: {},
     error: ""
 }
 
@@ -11,16 +11,16 @@ const contactSlice = createSlice({
     name: "contact",
     initialState,
     extraReducers: builder => {
-        builder.addCase(getAllContacts.pending, state => (
-            { ...state, loading: true, error: "", data: null, }
+        builder.addCase(getContact.pending, state => (
+            { ...state, loading: true, error: "", contactData: {}, }
         ))
-        builder.addCase(getAllContacts.fulfilled, (state, action) => (
-            { ...state, loading: false, data: action.payload, error: "" }
+        builder.addCase(getContact.fulfilled, (state, action) => (
+            { ...state, loading: false, error: "", contactData: action.payload }
         ))
-        builder.addCase(getAllContacts.rejected, (state, action) => (
-            { ...state, loading: false, data: null, error: action.error.message }
+        builder.addCase(getContact.rejected, (state, action) => (
+            { ...state, loading: false, contactData: {}, error: action.error.message }
         ))
     }
 })
 
-export default contactSlice.reducer;
+export default contactSlice.reducer

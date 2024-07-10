@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux'
 const Contacts = () => {
 
     const [currentPage, setCurrentPage] = useState(0)
-    const contactData = useSelector(state => state.contact)
+    const contactsData = useSelector(state => state.contacts)
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -20,11 +20,11 @@ const Contacts = () => {
 
     return (
         <>
-            <HomeClient data={contactData.data} />
+            <HomeClient data={contactsData.data} />
             {
-                contactData.loading && <LoadingPage text = "Loading ... " />
+                contactsData.loading && <LoadingPage text = "Loading ... " />
             }
-            <ContactList data={contactData.data} currentPage={currentPage} getAllContacts={getAllContacts} />
+            <ContactList data={contactsData.data} currentPage={currentPage} getAllContacts={getAllContacts} />
         </>
     )
 }
