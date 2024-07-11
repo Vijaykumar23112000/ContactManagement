@@ -39,7 +39,7 @@ const Modal = ({ router }) => {
         router.push('/contacts')
     }
 
-    const handleChange = (e) => setFormValues({ ...formValues, [e.target.name]: e.target.value });
+    const handleChange = e => setFormValues({ ...formValues, [e.target.name]: e.target.value });
 
     return (
         <>

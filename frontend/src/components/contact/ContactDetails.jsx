@@ -7,14 +7,14 @@ import { MdOutlineArrowBack } from 'react-icons/md';
 import Link from 'next/link';
 import { BiUpload } from 'react-icons/bi';
 import { getContact, updateImage } from '../api/ContactService';
+import UpdateForm from './UpdateForm';
 
 const ContactDetails = ({ contactId }) => {
 
-    const formInitialValues = { name: "", email: "", phone: "", address: "", title: "", status: "Active", photoUrl: "" };
     const dispatch = useDispatch();
     const contactData = useSelector(state => state.contact);
     const inputRef = useRef();
-    const [contact, setContact] = useState(contactData.contactData)
+    const [contact, setContact] = useState({})
 
     const SelectImage = () => inputRef.current.click();
 
@@ -28,13 +28,25 @@ const ContactDetails = ({ contactId }) => {
 
     useEffect(() => {
         dispatch(getContact(contactId));
-        console.log("1st useEffect => getContact called");
+        // setContact(contactData.contactData)
+        console.log(("1st use effect called"));
     }, [dispatch, contactId]);
+
+    useEffect(() => {
+        if (contactData.contactData) {
+            setContact(contactData.contactData);
+            console.log(("1st use effect called"))
+        }
+    }, [contactData.contactData]);
+
+    if (contactData.loading || !contact) {
+        return <LoadingPage text="Loading ..." />;
+    }
 
     return (
         <div>
             <Link href={"/contacts"}>
-                <MdOutlineArrowBack />
+                <MdOutlineArrowBack /> Back To Contacts List
             </Link>
             {contactData.loading && <LoadingPage text="Loading ... " />}
             <div className="profile">
@@ -53,7 +65,8 @@ const ContactDetails = ({ contactId }) => {
                     </div>
                 </div>
                 <div className="profile__settings">
-                    Settings will go here
+                    <UpdateForm contact={contact} />
+
                 </div>
             </div>
             <form className='hidden'>

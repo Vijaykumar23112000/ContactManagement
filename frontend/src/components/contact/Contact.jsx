@@ -33,7 +33,7 @@ const Contact = ({ contact }) => {
                 </div>
                 <div className="flex justify-start items-center gap-3 pl-5">
                     <FaPhone />
-                    <p>{contact.address}</p>
+                    <p>{contact.phone}</p>
                 </div>
                 <div className="flex justify-start items-center gap-3 pl-5">
                     {contact.status === "Active" ? <FaCheckCircle /> : <ImCross />}
