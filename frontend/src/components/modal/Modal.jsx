@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import React, { useRef, useState } from 'react'
 import { FaWindowClose } from "react-icons/fa";
-import { saveContact, updatePhoto } from '../api/ContactService';
+import { saveContact, updateImage } from '../api/ContactService';
 import LoadingPage from '../home/LoadingPage';
 
 const ModalFormData = [
@@ -30,7 +30,7 @@ const Modal = ({ router }) => {
         const formData = new FormData()
         formData.append("file", file, file.name)
         formData.append("id", data.id)
-        await updatePhoto(formData)
+        await updateImage(formData)
 
         setFile(null)
         setFormValues(formInitialValues)
