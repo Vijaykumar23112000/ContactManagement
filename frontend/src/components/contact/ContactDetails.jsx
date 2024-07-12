@@ -35,7 +35,7 @@ const ContactDetails = ({ contactId }) => {
     useEffect(() => {
         if (contactData.contactData) {
             setContact(contactData.contactData);
-            console.log(("1st use effect called"))
+            console.log(("2nd use effect called"))
         }
     }, [contactData.contactData]);
 
@@ -65,7 +65,7 @@ const ContactDetails = ({ contactId }) => {
                     </div>
                 </div>
                 <div className="profile__settings">
-                    <UpdateForm contact={contact} />
+                    <UpdateForm contact={contactData.contactData} />
 
                 </div>
             </div>

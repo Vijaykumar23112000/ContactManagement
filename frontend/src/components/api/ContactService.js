@@ -47,6 +47,6 @@ export const updateImage = async (formData) => {
     }
 }
 
-export const deleteContact = async (id) => {
-    return await axios.delete(`${API_URL}/${id}`)
-}
+// export const deleteContact = async (id) => {
+//     return await axios.delete(`${API_URL}/${id}`)
+// }

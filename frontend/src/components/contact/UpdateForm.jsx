@@ -1,8 +1,13 @@
 "use client"
 
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
+import { saveContact } from '../api/ContactService'
+import LoadingPage from '../home/LoadingPage'
 
 const UpdateForm = ({ contact }) => {
+
+    const [formValues, setFormValues] = useState(contact)
+    const [loading, setLoading] = useState(false)
 
     const formInputData = [
         { htmlFor: "name", type: "text", id: "name", name: "name", label: "Name", },
@@ -10,24 +15,22 @@ const UpdateForm = ({ contact }) => {
         { htmlFor: "phone", type: "text", id: "phone", name: "phone", label: "Phone", },
         { htmlFor: "address", type: "text", id: "address", name: "address", label: "Address", },
         { htmlFor: "title", type: "text", id: "title", name: "title", label: "Title", },
-        { htmlFor: "status", type: "text", id: "status", name: "status", label: "Status", },
     ]
 
-    const [formValues, setFormValues] = useState(contact)
+    const handleChange = e => setFormValues({ ...formValues, [e.target.name]: e.target.value })
 
-    const handleChange = e => {
-        setFormValues({ ...formValues, [e.target.name]: e.target.value })
-        console.log(formValues);
-    }
-
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
-        console.log(formValues);
+        setLoading(true)
+        try {
+            const { data } = await saveContact(formValues)
+            console.log("Updated data:", data)
+        } catch (error) {
+            console.error("Error saving contact:", error)
+        } finally {
+            setLoading(false)
+        }
     }
-
-    useEffect(() => {
-        setFormValues(contact);
-    }, [contact]);
 
     return (
         <div>
@@ -60,6 +63,9 @@ const UpdateForm = ({ contact }) => {
                     <button className='btn' type='submit'>Save</button>
                 </div>
             </form>
+            {
+                loading && <LoadingPage text="Saving Contact ... " />
+            }
         </div>
     )
 }
