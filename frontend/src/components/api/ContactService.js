@@ -1,8 +1,5 @@
-import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { api } from "./ApiConfig";
-
-const API_URL = "http://localhost:8000/contacts"
 
 export const saveContact = async (requestData) => {
     try {
@@ -11,6 +8,17 @@ export const saveContact = async (requestData) => {
         throw new Error(error.message);
     }
 }
+
+export const updateContact = createAsyncThunk("contact/Updated",
+    async (requestData) => {
+        try {
+            const response = await api.post("/contacts", requestData)
+            return response.data
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    }
+)
 
 export const getAllContacts = createAsyncThunk("contacts/fetchAllContacts",
     async ({ page = 0, size = 10 }) => {
@@ -35,10 +43,6 @@ export const getContact = createAsyncThunk("contact/fetchContact",
     }
 )
 
-export const updateContact = async (contact) => {
-    return await axios.get(API_URL, contact)
-}
-
 export const updateImage = async (formData) => {
     try {
         return await api.put("/contacts/photo", formData)
@@ -47,6 +51,6 @@ export const updateImage = async (formData) => {
     }
 }
 
-// export const deleteContact = async (id) => {
-//     return await axios.delete(`${API_URL}/${id}`)
-// }
+export const deleteContact = async (id) => {
+    return await api.delete(`/contacts/${id}`)
+}

@@ -1,13 +1,18 @@
 "use client"
 
 import React, { useState } from 'react'
-import { saveContact } from '../api/ContactService'
 import LoadingPage from '../home/LoadingPage'
+import { useDispatch } from 'react-redux'
+import { deleteContact, updateContact } from '../api/ContactService'
+import { useRouter } from 'next/navigation'
 
 const UpdateForm = ({ contact }) => {
 
     const [formValues, setFormValues] = useState(contact)
     const [loading, setLoading] = useState(false)
+    const dispatch = useDispatch()
+    const [deleted, setDeleted] = useState(false)
+    const router = useRouter()
 
     const formInputData = [
         { htmlFor: "name", type: "text", id: "name", name: "name", label: "Name", },
@@ -23,8 +28,8 @@ const UpdateForm = ({ contact }) => {
         e.preventDefault()
         setLoading(true)
         try {
-            const { data } = await saveContact(formValues)
-            console.log("Updated data:", data)
+            await dispatch(updateContact(formValues)).unwrap()
+            console.log("Contact updated successfully")
         } catch (error) {
             console.error("Error saving contact:", error)
         } finally {
@@ -32,6 +37,16 @@ const UpdateForm = ({ contact }) => {
         }
     }
 
+    const handleDeleteContact = () => {
+        setDeleted(true)
+        deleteContact(contact.id)
+        setTimeout(() => {
+            router.push("/contacts");
+        }, 5000)
+        setDeleted(false)
+    }
+
+    if (deleted) (<LoadingPage text="Contact Deleted Successfully" />)
     return (
         <div>
             <form className='form' onSubmit={handleSubmit}>
@@ -59,8 +74,12 @@ const UpdateForm = ({ contact }) => {
                         </select>
                     </div>
                 </div>
-                <div className="form_footer">
-                    <button className='btn' type='submit'>Save</button>
+                <div className="flex justify-start items-center">
+                    {/* <div className="form_footer"> */}
+                        <button className='btn' type='submit'>Save</button>
+                        <button className="btn" onClick={handleDeleteContact}>Delete</button>
+                    {/* </div> */}
+                    
                 </div>
             </form>
             {

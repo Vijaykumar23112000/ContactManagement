@@ -1,4 +1,4 @@
-import { getContact } from "@/components/api/ContactService"
+import { getContact, updateContact } from "@/components/api/ContactService"
 import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
@@ -21,6 +21,15 @@ const contactSlice = createSlice({
         builder.addCase(getContact.rejected, (state, action) => (
             { ...state, loading: false, contactData: {}, error: action.error.message }
         ))
+        builder.addCase(updateContact.pending, state => (
+            { ...state, loading: true, error: "" }
+        ))
+        builder.addCase(updateContact.fulfilled, (state, action) => (
+            { ...state, loading: false, error: "", contactData: action.payload }
+        ))
+        builder.addCase(updateContact.rejected, (state, action) => (
+            { ...state, loading: false, error: action.error.message }
+        ));
     }
 })
 
