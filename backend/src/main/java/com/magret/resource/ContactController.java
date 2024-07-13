@@ -5,7 +5,6 @@ import com.magret.entity.Contact;
 import com.magret.service.ContactService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,7 +22,6 @@ import static org.springframework.http.MediaType.IMAGE_PNG_VALUE;
 public class ContactController {
 
     private final ContactService contactService;
-    private final PagedResourcesAssembler<Contact> pagedResourcesAssembler;
 
 
     @PostMapping

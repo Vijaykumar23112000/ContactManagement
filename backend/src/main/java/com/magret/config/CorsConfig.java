@@ -17,14 +17,14 @@ public class CorsConfig {
 
     @Bean
     public CorsFilter corsFilter(){
-        var urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
+        var source = new UrlBasedCorsConfigurationSource();
         var corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowCredentials(true);
         corsConfiguration.setAllowedOrigins(List.of("http://localhost:3000"));
-        corsConfiguration.setAllowedHeaders(List.of(ORIGIN , ACCESS_CONTROL_ALLOW_ORIGIN , CONTENT_TYPE , ACCEPT , AUTHORIZATION , ACCESS_CONTROL_REQUEST_METHOD , ACCESS_CONTROL_ALLOW_CREDENTIALS));
-        corsConfiguration.setAllowedMethods(List.of(GET.name() , POST.name() , PUT.name() , PATCH.name() , DELETE.name() , OPTIONS.name()));
-        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**" , corsConfiguration);
-        return new CorsFilter(urlBasedCorsConfigurationSource);
+        corsConfiguration.setAllowedHeaders(List.of(ORIGIN ,CACHE_CONTROL ,ACCESS_CONTROL_ALLOW_ORIGIN , CONTENT_TYPE , ACCEPT , AUTHORIZATION , ACCESS_CONTROL_REQUEST_METHOD , ACCESS_CONTROL_ALLOW_CREDENTIALS));
+        corsConfiguration.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS","PATCH"));
+        source.registerCorsConfiguration("/**" , corsConfiguration);
+        return new CorsFilter(source);
     }
 
 }
