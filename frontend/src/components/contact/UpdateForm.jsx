@@ -4,15 +4,14 @@ import React, { useState } from 'react'
 import LoadingPage from '../home/LoadingPage'
 import { useDispatch } from 'react-redux'
 import { deleteContact, updateContact } from '../api/ContactService'
-import { useRouter } from 'next/navigation'
 
-const UpdateForm = ({ contact }) => {
+const UpdateForm = ({ contact , router }) => {
 
     const [formValues, setFormValues] = useState(contact)
     const [loading, setLoading] = useState(false)
     const dispatch = useDispatch()
     const [deleted, setDeleted] = useState(false)
-    const router = useRouter()
+    const [open , setOpen] = useState(false)
 
     const formInputData = [
         { htmlFor: "name", type: "text", id: "name", name: "name", label: "Name", },
@@ -40,13 +39,28 @@ const UpdateForm = ({ contact }) => {
     const handleDeleteContact = () => {
         setDeleted(true)
         deleteContact(contact.id)
-        setTimeout(() => {
-            router.push("/contacts");
-        }, 5000)
+        router.push('/contacts')
         setDeleted(false)
     }
 
+    const Modal = () => {
+        return (
+            <div className="h-screen w-screen absolute left-0 top-0 bg-black/80 flex flex-col justify-center items-center gap-3">
+                <div className="">
+                    {
+                        <p className='text-white'>Do u really want to delete {contact.name} .. ?</p>
+                    }
+                </div>
+                <div className="flex justify-start items-center gap-3">
+                    <button className='btn' onClick={() => setOpen(false)}>Close</button>
+                    <button className='btn' onClick={handleDeleteContact}>Delete</button>
+                </div>
+            </div>
+        )
+    }
+
     if (deleted) (<LoadingPage text="Contact Deleted Successfully" />)
+
     return (
         <div>
             <form className='form' onSubmit={handleSubmit}>
@@ -75,12 +89,12 @@ const UpdateForm = ({ contact }) => {
                     </div>
                 </div>
                 <div className="flex justify-start items-center">
-                    {/* <div className="form_footer"> */}
                         <button className='btn' type='submit'>Save</button>
-                        <button className="btn" onClick={handleDeleteContact}>Delete</button>
-                    {/* </div> */}
-                    
+                        <div className="btn" onClick={() => setOpen(true)}>Delete</div>                    
                 </div>
+                {
+                    open && <Modal />
+                }
             </form>
             {
                 loading && <LoadingPage text="Saving Contact ... " />

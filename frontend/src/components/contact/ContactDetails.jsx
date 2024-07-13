@@ -9,7 +9,7 @@ import { BiUpload } from 'react-icons/bi';
 import { getContact, updateImage } from '../api/ContactService';
 import UpdateForm from './UpdateForm';
 
-const ContactDetails = ({ contactId }) => {
+const ContactDetails = ({ contactId , router }) => {
 
     const dispatch = useDispatch();
     const contactData = useSelector(state => state.contact);
@@ -28,14 +28,11 @@ const ContactDetails = ({ contactId }) => {
 
     useEffect(() => {
         dispatch(getContact(contactId));
-        // setContact(contactData.contactData)
-        console.log(("1st use effect called"));
     }, [dispatch, contactId]);
 
     useEffect(() => {
         if (contactData.contactData) {
             setContact(contactData.contactData);
-            console.log(("2nd use effect called"))
         }
     }, [contactData.contactData]);
 
@@ -65,7 +62,7 @@ const ContactDetails = ({ contactId }) => {
                     </div>
                 </div>
                 <div className="profile__settings">
-                    <UpdateForm contact={contactData.contactData} />
+                    <UpdateForm router={router} contact={contactData.contactData} />
 
                 </div>
             </div>
